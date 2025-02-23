@@ -502,4 +502,12 @@
     <string name="saturday_short">周六</string>
     <string name="sunday_short">周日</string>
     <!--    DecimalFormatterImpl -->
+    <string name="prime_fill">充盈</string>
+    <string name="record_pump_site_change">泵更换管路</string>
+    <string name="record_insulin_cartridge_change">更换储药器</string>
+    <string name="cgm_sensor_insert">植入启用CGM传感器</string>
+    <string name="pump_battery_change">更换泵电池</string>
+
+    <string name="exportsettings">导出配置</string>
+
 </resources>
