@@ -48,7 +48,7 @@ class VersionCheckerUtilsImpl @Inject constructor(
         if (receiverStatusStore.isKnownNetworkStatus && receiverStatusStore.isConnected) {
             Thread {
                 try {
-                    val definition: String = URL("https://gitee.com/hellboy123/config/raw/master/aapsversion3-2.json").readText()
+                    val definition: String = URL("https://gitee.com/hellboy123/config/raw/master/aapsversion3-3.json").readText()
                     val version: String? = AllowedVersions.findByApi(definition, Build.VERSION.SDK_INT)?.optString("supported")
                     val newVersionByApi = compareWithCurrentVersion(version, config.get().VERSION_NAME)
 
