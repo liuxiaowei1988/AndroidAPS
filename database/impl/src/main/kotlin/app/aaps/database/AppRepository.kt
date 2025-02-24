@@ -801,6 +801,13 @@ class AppRepository @Inject internal constructor(
         database.apsResultDao.getApsResults(start, end)
             .subscribeOn(Schedulers.io())
 
+    /**
+     * 渣渣威1-记录自定义校准数据
+     */
+    fun getUserEntryDataLastCalibrationBg():  String =
+        database.userEntryDao.getUserEntryDataLastCalibrationBg(UserEntry.Action.CALIBRATION)
+
+
 }
 
 @Suppress("USELESS_CAST", "unused")

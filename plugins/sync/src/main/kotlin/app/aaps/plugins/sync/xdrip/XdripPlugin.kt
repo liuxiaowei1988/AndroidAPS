@@ -23,6 +23,7 @@ import app.aaps.core.interfaces.iob.GlucoseStatusProvider
 import app.aaps.core.interfaces.iob.IobCobCalculator
 import app.aaps.core.interfaces.logging.AAPSLogger
 import app.aaps.core.interfaces.logging.LTag
+import app.aaps.core.interfaces.plugin.ActivePlugin
 import app.aaps.core.interfaces.plugin.PluginBase
 import app.aaps.core.interfaces.plugin.PluginDescription
 import app.aaps.core.interfaces.profile.Profile
@@ -117,6 +118,11 @@ class XdripPlugin @Inject constructor(
     override val hasWritePermission: Boolean = true
     override val connected: Boolean = true
     override val status: String = ""
+
+
+    /***校准及查看当前通道**/
+    @Inject lateinit var activePlugin: ActivePlugin
+    @Inject lateinit var baseCustomPlugin: BaseCustomPlugin
 
     override fun onStart() {
         super.onStart()
@@ -312,6 +318,27 @@ class XdripPlugin @Inject constructor(
                 else         -> error("Invalid collection")
             }
         }
+    }
+
+
+    /**
+     * 渣渣威-1-获取自定义校准数据
+     */
+    override fun getCustomCalibrationDiff(): String {
+        return baseCustomPlugin.getCustomCalibrationDiff()
+    }
+
+    /**
+     * 渣渣威-1-校准操作-录入当前血糖数据
+     */
+    override fun sendCustomCalibration(bg: Double):Boolean {
+        return baseCustomPlugin.sendCustomCalibration(bg)
+    }
+    /**
+     * 渣渣威-1-校准操作-录入当前血糖数据
+     */
+    override fun getBgWithCustomCalibration(bg: Double):Double {
+        return baseCustomPlugin.getBgWithCustomCalibration(bg)
     }
 
     private fun sendProfileStore(dataPair: DataSyncSelector.DataPair, progress: String) {

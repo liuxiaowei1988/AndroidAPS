@@ -77,6 +77,7 @@ import app.aaps.core.interfaces.rx.weardata.EventData
 import app.aaps.core.interfaces.sharedPreferences.SP
 import app.aaps.core.interfaces.source.DexcomBoyda
 import app.aaps.core.interfaces.source.XDripSource
+import app.aaps.core.interfaces.sync.XDripBroadcast
 import app.aaps.core.interfaces.ui.UiInteraction
 import app.aaps.core.interfaces.utils.DateUtil
 import app.aaps.core.interfaces.utils.DecimalFormatter
@@ -155,6 +156,9 @@ class OverviewFragment : DaggerFragment(), View.OnClickListener, OnLongClickList
     @Inject lateinit var uiInteraction: UiInteraction
     @Inject lateinit var decimalFormatter: DecimalFormatter
     @Inject lateinit var commandQueue: CommandQueue
+
+    /**渣渣威-1-自定义工具接口*/
+    @Inject lateinit var xDripBroadcast: XDripBroadcast
 
     private val disposable = CompositeDisposable()
 
@@ -430,9 +434,10 @@ class OverviewFragment : DaggerFragment(), View.OnClickListener, OnLongClickList
                 }
 
                 R.id.calibration_button  -> {
-                    if (xDripSource.isEnabled()) {
-                        uiInteraction.runCalibrationDialog(childFragmentManager)
-                    }
+                    /**渣渣威-1-所有非德康通道显示校准**/
+                    // if (xDripSource.isEnabled()) {
+                    uiInteraction.runCalibrationDialog(childFragmentManager)
+                    // }
                 }
 
                 R.id.accept_temp_button  -> {
@@ -598,7 +603,9 @@ class OverviewFragment : DaggerFragment(), View.OnClickListener, OnLongClickList
             }
 
             // **** Calibration & CGM buttons ****
-            val xDripIsBgSource = xDripSource.isEnabled()
+            // val xDripIsBgSource = xDripSource.isEnabled()
+            /**渣渣威-1-所有非德康通道显示校准**/
+            val xDripIsBgSource = true
             val dexcomIsSource = dexcomBoyda.isEnabled()
             binding.buttonsLayout.calibrationButton.visibility = (xDripIsBgSource && actualBG != null && preferences.get(BooleanKey.OverviewShowCalibrationButton)).toVisibility()
             if (dexcomIsSource) {
@@ -833,6 +840,8 @@ class OverviewFragment : DaggerFragment(), View.OnClickListener, OnLongClickList
                 binding.infoLayout.delta.text = profileUtil.fromMgdlToSignedStringInUnits(glucoseStatus.delta)
                 binding.infoLayout.avgDelta.text = profileUtil.fromMgdlToSignedStringInUnits(glucoseStatus.shortAvgDelta)
                 binding.infoLayout.longAvgDelta.text = profileUtil.fromMgdlToSignedStringInUnits(glucoseStatus.longAvgDelta)
+                /**渣渣威-1-设置校准位置显示的校准数值**/
+                binding.infoLayout.calibrationDiff.text =xDripBroadcast.getCustomCalibrationDiff()
             } else {
                 binding.infoLayout.deltaLarge.text = ""
                 binding.infoLayout.delta.text = "Δ " + rh.gs(app.aaps.core.ui.R.string.value_unavailable_short)

@@ -17,12 +17,17 @@ import app.aaps.core.data.model.SourceSensor
 import app.aaps.core.data.model.TrendArrow
 import app.aaps.core.data.ue.Sources
 import app.aaps.core.interfaces.db.PersistenceLayer
+import app.aaps.core.interfaces.receivers.Intents
+import app.aaps.core.interfaces.sync.XDripBroadcast
+import app.aaps.core.keys.BooleanKey
+import app.aaps.core.keys.Preferences
 import dagger.android.HasAndroidInjector
 import kotlinx.coroutines.Dispatchers
 import org.json.JSONArray
 import org.json.JSONException
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.round
 
 @Singleton
 class PathedOTAppPlugin @Inject constructor(rh: ResourceHelper, aapsLogger: AAPSLogger, )
@@ -42,10 +47,16 @@ class PathedOTAppPlugin @Inject constructor(rh: ResourceHelper, aapsLogger: AAPS
         @Inject lateinit var injector: HasAndroidInjector
         @Inject lateinit var dateUtil: DateUtil
         @Inject lateinit var persistenceLayer: PersistenceLayer
+        @Inject lateinit var preferences: Preferences
+        @Inject lateinit var xDripBroadcast: XDripBroadcast
+
 
         init {
             (context.applicationContext as HasAndroidInjector).androidInjector().inject(this)
         }
+
+
+
 
         override suspend fun doWorkAndLog(): Result {
             var ret = Result.success()
@@ -64,7 +75,8 @@ class PathedOTAppPlugin @Inject constructor(rh: ResourceHelper, aapsLogger: AAPS
                                 "sgv" ->{
                                     glucoseValues += GV(
                                         timestamp = jsonObject.getLong("date"),
-                                        value = jsonObject.getDouble("sgv"),
+                                        // value = jsonObject.getDouble("sgv"),
+                                        value = xDripBroadcast.getBgWithCustomCalibration(jsonObject.getDouble("sgv")), //返回校准后的血糖数据
                                         raw = jsonObject.getDouble("sgv"),
                                         noise = null,
                                         trendArrow = TrendArrow.fromString(jsonObject.getString("direction")),

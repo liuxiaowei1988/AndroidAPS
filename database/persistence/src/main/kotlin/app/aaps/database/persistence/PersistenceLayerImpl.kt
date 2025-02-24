@@ -32,6 +32,7 @@ import app.aaps.core.interfaces.utils.DateUtil
 import app.aaps.database.AppRepository
 import app.aaps.database.ValueWrapper
 import app.aaps.database.entities.TherapyEvent
+import app.aaps.database.entities.UserEntry
 import app.aaps.database.persistence.converters.fromDb
 import app.aaps.database.persistence.converters.toDb
 import app.aaps.database.transactions.CancelCurrentOfflineEventIfAnyTransaction
@@ -108,6 +109,7 @@ import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.plusAssign
+import org.apache.commons.lang3.ObjectUtils
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.filterNotNull
@@ -1784,4 +1786,9 @@ class PersistenceLayerImpl @Inject constructor(
                 }
                 transactionResult
             }
+    /**
+     * 获取用户录入的最后一次校准数据
+     */
+    override fun getUserEntryDataLastCalibrationBg(): String =repository.getUserEntryDataLastCalibrationBg()
+
 }

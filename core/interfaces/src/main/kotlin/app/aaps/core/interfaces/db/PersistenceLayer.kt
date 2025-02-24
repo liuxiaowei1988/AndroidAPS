@@ -1383,4 +1383,9 @@ interface PersistenceLayer {
      */
     fun insertOrUpdateApsResult(apsResult: APSResult): Single<TransactionResult<APSResult>>
 
+    /**
+     * 获取最后一次用户输入的校准血糖数据
+     */
+    fun getUserEntryDataLastCalibrationBg(): String
+
 }

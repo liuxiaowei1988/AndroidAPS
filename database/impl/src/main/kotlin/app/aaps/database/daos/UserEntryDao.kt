@@ -23,4 +23,10 @@ interface UserEntryDao {
     @Query("SELECT * FROM $TABLE_USER_ENTRY WHERE unlikely(timestamp >= :timestamp) AND likely(source != :excludeSource) ORDER BY timestamp DESC")
     fun getUserEntryFilteredDataFromTime(excludeSource: Sources, timestamp: Long): Single<List<UserEntry>>
 
+    /**
+     * 渣渣威-1-获取最后一条记录 用于校准
+     */
+    @Query("SELECT note FROM $TABLE_USER_ENTRY where `action`=:act ORDER BY id DESC limit 1")
+    fun getUserEntryDataLastCalibrationBg(act: UserEntry.Action): String
+
 }

@@ -29,4 +29,23 @@ interface XDripBroadcast {
         collection: String, dataPairs: List<DataSyncSelector.DataPair>, progress:
         String
     )
+
+
+    /**
+     * 渣渣威-1-获取自定义校准数据
+     */
+    fun getCustomCalibrationDiff():String
+
+
+
+    /**
+     * 渣渣威-1-校准操作-录入当前血糖数据
+     */
+    fun sendCustomCalibration(bg: Double):Boolean
+
+    /**
+     * 渣渣威-1 返回校准后的血糖数据
+     */
+    fun getBgWithCustomCalibration(bg:Double):Double
+
 }

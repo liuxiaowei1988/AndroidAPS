@@ -18,6 +18,7 @@ import app.aaps.core.utils.HtmlHelper
 import app.aaps.ui.databinding.DialogCalibrationBinding
 import com.google.common.base.Joiner
 import dagger.android.HasAndroidInjector
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.LinkedList
 import javax.inject.Inject
@@ -85,8 +86,11 @@ class CalibrationDialog : DialogFragmentWithDate() {
         if (bg > 0) {
             activity?.let { activity ->
                 OKDialog.showConfirmation(activity, rh.gs(app.aaps.core.ui.R.string.calibration), HtmlHelper.fromHtml(Joiner.on("<br/>").join(actions)), {
-                    uel.log(action = Action.CALIBRATION, source = Sources.CalibrationDialog, value = ValueWithUnit.fromGlucoseUnit(bg, units))
-                    xDripBroadcast.sendCalibration(bg)
+                    // uel.log(action = Action.CALIBRATION, source = Sources.CalibrationDialog, value = ValueWithUnit.fromGlucoseUnit(bg, units))
+                    uel.log(action = Action.CALIBRATION, source = Sources.CalibrationDialog, note = bg.toBigDecimal().setScale(1, RoundingMode.HALF_UP).toString(), value = ValueWithUnit.fromGlucoseUnit(bg, units))
+                    // xDripBroadcast.sendCalibration(bg)
+                    /**渣渣威-1-实现自定义校准**/
+                    xDripBroadcast.sendCustomCalibration(bg)
                 })
             }
         } else
